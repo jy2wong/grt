@@ -1,3 +1,5 @@
+grt.py uses python3 and sqlite3.
+
 Contains information provided by the Regional Municipality of Waterloo under licence.
 The latest GTFS data can be found here:
 http://www.regionofwaterloo.ca/en/regionalGovernment/GRT_GTFSdata.asp
@@ -6,7 +8,9 @@ The current kwgtfs.db provided in this repository contains data that is
 valid from September 2 2013 to December 22 2013.
 
 If you want to generate a new database, unzip GRT_GTFS.zip to a
-directory called data, delete kwgtfs.db and run make.
+directory called data, delete kwgtfs.db and run 
+
+	sqlite3 kwgtfs.db < create_kwgtfs.sql
 
 Don't forget to change db_location in grt.py before you use the script!
 
