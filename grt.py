@@ -35,7 +35,7 @@ parser.add_argument("-d", "--day",
 parser.add_argument("-l", "--limit", 
 		help="Choose how many rows to list. A limit of -1 will cause \
 		all rows to be displayed. Defaults to 10.", 
-		default=10, nargs=1, type=int)
+		default=10, type=int)
 
 args = parser.parse_args()
 
@@ -50,7 +50,7 @@ if (args.limit >= 0):
 	limit_str = "LIMIT 0, {}".format(args.limit)
 
 if (args.stopid):
-	if (stop_id >= 0):
+	if (args.stopid >= 0):
 		stop_id = args.stopid
 	else:
 		print("Stop IDs must be positive.")
