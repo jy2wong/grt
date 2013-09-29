@@ -1,0 +1,7 @@
+service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
+13FALL-All-Sunday-03,0,0,0,0,0,0,1,20130902,20131222
+13FALL-All-Weekday-05,1,1,1,1,1,0,0,20130903,20131220
+13FALL-All-Weekday-05-0000100,0,0,0,0,1,0,0,20130903,20131220
+13FALL-All-Weekday-05-1111000,1,1,1,1,0,0,0,20130903,20131220
+13FALL-All-Weekday-05-0001100,0,0,0,1,1,0,0,20130903,20131220
+13FALL-All-Saturday-03,0,0,0,0,0,1,0,20130907,20131221
