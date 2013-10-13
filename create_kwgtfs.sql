@@ -50,7 +50,7 @@ CREATE TABLE shapes (
 );
 
 CREATE TABLE stops (
-	stop_id INTEGER,
+	stop_id TEXT,
 	stop_code INTEGER,
 	stop_name TEXT,
 	stop_desc TEXT,
@@ -91,3 +91,26 @@ CREATE TABLE trips (
 .import data/stop_times.txt stop_times
 .import data/stops.txt stops
 .import data/trips.txt trips
+
+CREATE TABLE stop_lookup AS
+	SELECT trips.service_id, stop_times.arrival_time,
+		   stops.stop_name, trips.trip_headsign,
+	       stops.stop_id,
+		   calendar.*
+	FROM stop_times
+	INNER JOIN trips ON stop_times.trip_id = trips.trip_id
+	INNER JOIN calendar ON trips.service_id = calendar.service_id
+	INNER JOIN stops ON stop_times.stop_id = stops.stop_id;
+
+DROP TABLE agency;
+DROP TABLE calendar;
+DROP TABLE calendar_dates;
+DROP TABLE routes;
+DROP TABLE shapes;
+DROP TABLE stop_times;
+DROP TABLE trips;
+
+CREATE INDEX stop_index ON 
+	stop_lookup(stop_id ASC, arrival_time ASC);
+
+VACUUM;

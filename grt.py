@@ -32,7 +32,7 @@ parser.add_argument("-d", "--day",
 		default=time.strftime("%A", time.localtime()), 
 		nargs='?')
 
-parser.add_argument("-l", "--limit", 
+parser.add_argument("-n", "--limit", 
 		help="Choose how many rows to list. A limit of -1 will cause \
 		all rows to be displayed. Defaults to 10.", 
 		default=10, type=int)
@@ -95,31 +95,25 @@ if (args.intersection):
 if (stop_id != -1):
 	print("Stop ID {} after {} on {}".format(stop_id, args.time, args.day))
 	c.execute('''
-	SELECT trips.service_id, stop_times.arrival_time,
-		   stops.stop_name, trips.trip_headsign
-	FROM stop_times
-	INNER JOIN trips ON stop_times.trip_id = trips.trip_id
-	INNER JOIN calendar ON trips.service_id = calendar.service_id
-	INNER JOIN stops ON stop_times.stop_id = stops.stop_id
-	WHERE stops.stop_id = {id}
-			AND stop_times.arrival_time >= ?
-			AND calendar.{day} = 1
-	ORDER BY stop_times.arrival_time
+	SELECT service_id, arrival_time,
+		   stop_name, trip_headsign
+	FROM stop_lookup
+	WHERE stop_id = {id}
+			AND arrival_time >= ?
+			AND {day} = 1
+	ORDER BY arrival_time
 	{limit}
 	'''.format(id=stop_id, day=args.day.lower(), limit=limit_str), (args.time,))
 else:
 	print("Showing buses leaving from the above intersections after {} on {}".format(args.time, args.day))
 	c.execute('''
-	SELECT trips.service_id, stop_times.arrival_time,
-		   stops.stop_name,trips.trip_headsign
-	FROM stop_times
-	INNER JOIN trips ON stop_times.trip_id = trips.trip_id
-	INNER JOIN calendar ON trips.service_id = calendar.service_id
-	INNER JOIN stops ON stop_times.stop_id = stops.stop_id
+	SELECT service_id, arrival_time,
+		   stop_name,trip_headsign
+	FROM stop_lookup
 	WHERE stop_name LIKE ? AND stop_name LIKE ?
-			AND stop_times.arrival_time >= ?
-			AND calendar.{day} = 1
-	ORDER BY stop_times.arrival_time
+			AND arrival_time >= ?
+			AND {day} = 1
+	ORDER BY arrival_time
 	{limit}
 	'''.format(day=args.day.lower(), limit=limit_str), 
 	('%' + args.intersection[0] + '%', '%' + args.intersection[1] + '%', args.time))
