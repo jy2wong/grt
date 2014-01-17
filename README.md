@@ -88,4 +88,3 @@ grt.py currently only understands holidays when the --day flag is not
 being used. GRT buses are on holiday
 schedule (i.e. Sunday schedule) on the days listed here:
 http://www.grt.ca/en/routesschedules/holidayservice.asp
-
