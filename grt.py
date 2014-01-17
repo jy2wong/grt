@@ -20,7 +20,7 @@ parser.add_argument("-t", "--time",
 		help="Display only buses scheduled after TIME. If not \
 		specified, defaults to now. If no arguments are given, all \
 		matching bus times are displayed. TIME must be of the form \
-		23:45:01.", 
+                HH:MM:SS (e.g. 23:45:01).", 
 		const="all", 
 		default=time.strftime("%H:%M:%S", time.localtime()), 
 		nargs='?')
@@ -28,8 +28,8 @@ parser.add_argument("-t", "--time",
 parser.add_argument("-d", "--day", 
 		help="Use the bus schedule for DAY. If not specified, \
 		defaults to today. Specify full day of the week, e.g. Monday", 
-		const=time.strftime("%A", time.localtime()), 
-		default=time.strftime("%A", time.localtime()), 
+		const=-1,
+		default=-1,
 		nargs='?')
 
 parser.add_argument("-n", "--limit", 
@@ -41,10 +41,18 @@ args = parser.parse_args()
 
 stop_id = -1
 limit_str = ""
+active_date = 0
 
 if (args.time == "all"):
 	args.limit = -1
 	args.time = "00:00:00"
+
+if (args.day == -1):
+    args.day = time.strftime("%A", time.localtime())
+    active_date = int(time.strftime("%Y%m%d", time.localtime()))
+else:
+    active_date = int(time.strftime("%Y%m%d", time.localtime()))
+    # ^ TODO
 
 if (args.limit >= 0):
 	limit_str = "LIMIT 0, {}".format(args.limit)
@@ -101,9 +109,13 @@ if (stop_id != -1):
 	WHERE stop_id = {id}
 			AND arrival_time >= ?
 			AND {day} = 1
+                        AND start_date <= {date}
+                        AND end_date >= {date}
 	ORDER BY arrival_time
 	{limit}
-	'''.format(id=stop_id, day=args.day.lower(), limit=limit_str), (args.time,))
+	'''.format(id=stop_id, day=args.day.lower(), limit=limit_str,
+            date=active_date
+            ), (args.time,))
 else:
 	print("Showing buses leaving from the above intersections after {} on {}".format(args.time, args.day))
 	c.execute('''
@@ -113,9 +125,13 @@ else:
 	WHERE stop_name LIKE ? AND stop_name LIKE ?
 			AND arrival_time >= ?
 			AND {day} = 1
+                        AND start_date <= {current_date}
+                        AND end_date >= {current_date}
 	ORDER BY arrival_time
 	{limit}
-	'''.format(day=args.day.lower(), limit=limit_str), 
+	'''.format(day=args.day.lower(), limit=limit_str,
+            current_date=time.strftime("%Y%m%d", time.localtime())
+            ), 
 	('%' + args.intersection[0] + '%', '%' + args.intersection[1] + '%', args.time))
 
 for row in c:

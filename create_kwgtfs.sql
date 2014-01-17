@@ -1,9 +1,10 @@
 CREATE TABLE agency (
-	agency_name TEXT,
+	agency_phone TEXT,
 	agency_url TEXT,
+	agency_id TEXT,
+	agency_name TEXT,
 	agency_timezone TEXT,
-	agency_lang TEXT,
-	agency_phone TEXT
+	agency_lang TEXT
 );
 
 CREATE TABLE calendar_dates (
@@ -14,15 +15,15 @@ CREATE TABLE calendar_dates (
 
 CREATE TABLE calendar (
 	service_id TEXT,
+	start_date TEXT,
+	end_date TEXT,
 	monday INTEGER,
 	tuesday INTEGER,
 	wednesday INTEGER,
 	thursday INTEGER,
 	friday INTEGER,
 	saturday INTEGER,
-	sunday INTEGER,
-	start_date TEXT,
-	end_date TEXT
+	sunday INTEGER
 );
 
 CREATE TABLE fare_attributes (
@@ -34,32 +35,36 @@ CREATE TABLE fare_attributes (
 	transfer_duration INTEGER
 );
 CREATE TABLE routes (
-	route_id TEXT,
-	route_short_name INTEGER,
 	route_long_name TEXT,
-	route_desc TEXT,
+	route_id TEXT,
 	route_type INTEGER,
-	route_url TEXT
+	route_text_color TEXT,
+	agency_id TEXT,
+	route_color TEXT,
+	route_url TEXT,
+	route_desc TEXT,
+	route_short_name INTEGER
 );
 
 CREATE TABLE shapes (
 	shape_id INTEGER,
 	shape_pt_lat REAL,
 	shape_pt_lon REAL,
-	shape_pt_sequence INTEGER
+	shape_pt_sequence INTEGER,
+	shape_dist_traveled REAL
 );
 
 CREATE TABLE stops (
-	stop_id TEXT,
-	stop_code INTEGER,
-	stop_name TEXT,
-	stop_desc TEXT,
 	stop_lat REAL,
+	stop_code INTEGER,
 	stop_lon REAL,
-	zone_id INTEGER,
+	stop_id TEXT,
 	stop_url TEXT,
+	parent_station INTEGER,
+	stop_desc TEXT,
+	stop_name TEXT,
 	location_type INTEGER,
-	parent_station INTEGER
+	zone_id INTEGER
 );
 
 CREATE TABLE stop_times (
@@ -68,18 +73,20 @@ CREATE TABLE stop_times (
 	departure_time TEXT,
 	stop_id INTEGER,
 	stop_sequence INTEGER,
+	stop_headsign TEXT,
 	pickup_type INTEGER,
-	drop_off_type INTEGER
+	drop_off_type INTEGER,
+	shape_dist_traveled TEXT
 );
 
 CREATE TABLE trips (
+	block_id TEXT,
 	route_id TEXT,
-	service_id TEXT,
-	trip_id TEXT,
-	trip_headsign TEXT,
 	direction_id INTEGER,
-	block_id INTEGER,
-	shape_id INTEGER
+	trip_headsign TEXT,
+	shape_id INTEGER,
+	service_id TEXT,
+	trip_id TEXT
 );
 
 .separator ,
