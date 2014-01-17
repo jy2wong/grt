@@ -1,4 +1,5 @@
-# About
+About
+-----
 
 Contains information provided by the Regional Municipality of Waterloo under licence.
 The latest GTFS data can be found here:
@@ -7,7 +8,8 @@ http://www.regionofwaterloo.ca/en/regionalGovernment/GRT_GTFSdata.asp
 The current GRT_GTFS.zip provided in this repository contains data that is
 valid from December 23 2013 to April 27 2014.
 
-# Installation
+Installation
+------------
 
 grt.py uses python3 and sqlite3, and you'll need to make sure both are
 installed before you can use grt.py.
@@ -18,7 +20,8 @@ To generate the database, use
 
 Don't forget to change db_location in grt.py before you use the script!
 
-# Examples
+Examples
+--------
 
 If you know the 4-digit stop id, you can use grt.py just like you would
 the texting service.
@@ -35,7 +38,8 @@ This is a neat trick you can use to display most buses leaving from
 Ring Road.
 	grt.py -i 'u.w.' ''
 
-# Caveats
+Caveats
+-------
 
 grt.py currently only understands holidays when the --day flag is not
 being used. GRT buses are on holiday
