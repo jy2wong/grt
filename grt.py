@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# vim : set noexpandtab tabstop=8
 
 import time
 import argparse
@@ -39,6 +40,7 @@ parser.add_argument("-n", "--limit",
 
 args = parser.parse_args()
 
+single_stop_id = False
 stop_id = -1
 limit_str = ""
 active_date = 0
@@ -60,6 +62,7 @@ if (args.limit >= 0):
 if (args.stopid):
 	if (args.stopid >= 0):
 		stop_id = args.stopid
+		single_stop_id = True
 	else:
 		print("Stop IDs must be positive.")
 		exit()
@@ -92,49 +95,49 @@ if (args.intersection):
 	if len(stop_id) > 1:
 		print("There's more than one stop matching that intersection.")
 		print(stop_id)
-		stop_id = -1
 	elif len(stop_id) == 1:
 		stop_id = stop_id[0]
+		single_stop_id = True
 	else:
 		print("No stops found.")
 		conn.close()
 		exit()
 
-if (stop_id != -1):
+if (single_stop_id):
 	print("Stop ID {} after {} on {}".format(stop_id, args.time, args.day))
 	c.execute('''
-	SELECT service_id, arrival_time,
+	SELECT arrival_time,
 		   stop_name, trip_headsign
 	FROM stop_lookup
 	WHERE stop_id = {id}
 			AND arrival_time >= ?
 			AND {day} = 1
-                        AND start_date <= {date}
-                        AND end_date >= {date}
+			AND start_date <= {date}
+			AND end_date >= {date}
 	ORDER BY arrival_time
 	{limit}
 	'''.format(id=stop_id, day=args.day.lower(), limit=limit_str,
-            date=active_date
-            ), (args.time,))
+		date=active_date), (args.time,))
 else:
 	print("Showing buses leaving from the above intersections after {} on {}".format(args.time, args.day))
 	c.execute('''
-	SELECT service_id, arrival_time,
-		   stop_name,trip_headsign
-	FROM stop_lookup
-	WHERE stop_name LIKE ? AND stop_name LIKE ?
-			AND arrival_time >= ?
-			AND {day} = 1
-                        AND start_date <= {current_date}
-                        AND end_date >= {current_date}
-	ORDER BY arrival_time
-	{limit}
-	'''.format(day=args.day.lower(), limit=limit_str,
-            current_date=time.strftime("%Y%m%d", time.localtime())
-            ), 
-	('%' + args.intersection[0] + '%', '%' + args.intersection[1] + '%', args.time))
+		SELECT stop_id, arrival_time,
+		       stop_name,trip_headsign
+		FROM stop_lookup
+		WHERE stop_id IN ({ids})
+		  AND arrival_time >= ?
+		  AND {day} = 1
+		  AND start_date <= {date}
+		  AND end_date >= {date}
+		ORDER BY arrival_time
+		{limit}
+		'''.format(day=args.day.lower(), limit=limit_str,
+			date=active_date,
+			ids=','.join((sid[0] for sid in stop_id))),
+		(args.time,))
 
 for row in c:
 	print(row)
 
 conn.close()
+
