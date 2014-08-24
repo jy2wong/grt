@@ -2,7 +2,6 @@
 # vim : set noexpandtab tabstop=4
 
 from datetime import datetime,time,timedelta
-#import datetime
 import argparse
 import sqlite3
 import os
@@ -113,7 +112,8 @@ if (args.intersection):
         exit()
 
 if (single_stop_id is not None):
-    print("Stop ID {} after {} on {}".format(single_stop_id, args.time, args.day))
+    print("Showing schedule for stop ID {} after {} on {}".format(
+        single_stop_id, args.time, args.day))
     c.execute('''
     SELECT service_id, arrival_time,
            stop_name, trip_headsign
@@ -147,7 +147,9 @@ else:
 
 # display results of bus schedule query
 for row in c:
-    print("{thing}  {arrival_time}  [{stop_name}] {trip_headsign}".format(arrival_time=row[1][:5], stop_name=row[2], trip_headsign=row[3], thing=row[0]))
+    print("{thing}  {arrival_time}  [{stop_name}] {trip_headsign}".format(
+        thing=row[0], arrival_time=row[1][:5], stop_name=row[2],
+        trip_headsign=row[3]))
 
 conn.close()
 
