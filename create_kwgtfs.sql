@@ -36,7 +36,7 @@ CREATE TABLE fare_attributes (
 );
 CREATE TABLE routes (
 	route_long_name TEXT,
-	route_id TEXT,
+	route_id INTEGER,
 	route_type INTEGER,
 	route_text_color TEXT,
 	agency_id TEXT,
@@ -68,7 +68,7 @@ CREATE TABLE stops (
 );
 
 CREATE TABLE stop_times (
-	trip_id TEXT,
+	trip_id INTEGER,
 	arrival_time TEXT,
 	departure_time TEXT,
 	stop_id INTEGER,
@@ -81,12 +81,12 @@ CREATE TABLE stop_times (
 
 CREATE TABLE trips (
 	block_id TEXT,
-	route_id TEXT,
+	route_id INTEGER,
 	direction_id INTEGER,
 	trip_headsign TEXT,
 	shape_id INTEGER,
 	service_id TEXT,
-	trip_id TEXT
+	trip_id INTEGER
 );
 
 .separator ,
@@ -117,7 +117,7 @@ DROP TABLE shapes;
 DROP TABLE stop_times;
 DROP TABLE trips;
 
-CREATE INDEX stop_index ON 
+CREATE INDEX stop_index ON
 	stop_lookup(stop_id ASC, arrival_time ASC);
 
 VACUUM;
