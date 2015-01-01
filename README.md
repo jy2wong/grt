@@ -16,7 +16,7 @@ Contains information provided by the Regional Municipality of Waterloo
 under licence.
 
 The current GRT_GTFS.zip provided in this repository contains data that
-is valid from August 08 2013 to December 19 2014.
+is valid from September 2 2014 to April 26 2015.
 I'll try to keep the GRT_GTFS.zip up to date (I actually use this thing
 sort of frequently), but if it's not, you can download your own copy of
 the GTFS data.

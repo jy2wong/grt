@@ -81,8 +81,8 @@ CREATE TABLE stop_times (
 
 CREATE TABLE trips (
 	block_id TEXT,
-	route_id INTEGER,
 	direction_id INTEGER,
+	route_id INTEGER,
 	trip_headsign TEXT,
 	shape_id INTEGER,
 	service_id TEXT,
