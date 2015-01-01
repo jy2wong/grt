@@ -6,7 +6,7 @@ import argparse
 import sqlite3
 import os
 
-db_location = '/users/jy2wong/Code/grt'
+db_location = '/users/jy2wong/code/grt'
 
 parser = argparse.ArgumentParser()
 stop = parser.add_mutually_exclusive_group()
